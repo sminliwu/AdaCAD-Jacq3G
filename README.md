@@ -11,4 +11,6 @@ A tiny driver to connect the AVL Jacq3 loom to [AdaCAD]([https://github.com/](ht
 
 ## File Descriptions
 
-* `DBNode.js` -- classes for holding onto a Firebase realtime database for real-time loom-AdaCAD connection.
+* `DBNode.js` -- classes for holding onto nodes in a Firebase realtime database for real-time loom-AdaCAD connection.
+* `firebaseDBPipe.js` -- creates all of the required DB nodes to maintain loom status.
+* `jacq3g.js` -- handles sending/receiving data with the Jacq3 loom.
