@@ -1,0 +1,16 @@
+{
+  "name": "adacad-jacq3g",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "S Wu",
+  "license": "ISC",
+  "dependencies": {
+    "firebase": "^10.0.0",
+    "serialport": "^11.0.0",
+    "url-parse": "^1.5.10"
+  }
+}

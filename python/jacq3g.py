@@ -26,11 +26,11 @@ class Jacq3G:
         self.frames[index] = is_up
 
     def getPick(self):
-        pick = b'\x80' + toBits(self.frames[0:120]) + b'\xc0' + b'\x81' + toBits(self.frames[120:240]) +       b'\xc0' + b'\x82'+toBits(self.frames[240:360])+b'\xc0';
+        pick = b'\x80' + toBits(self.frames[0:120]) + b'\xc0' + b'\x81' + toBits(self.frames[120:240]) +       b'\xc0' + b'\x82'+toBits(self.frames[240:360])+b'\xc0'
         return pick
 
     def getNullPick(self):
-        pick = b'\x80' + toBits([False]*120) + b'\xc0' +  b'\x81' + toBits([False]*120) +  b'\xc0' +  b'\x82' + toBits([False]*120) + b'\xc0';
+        pick = b'\x80' + toBits([False]*120) + b'\xc0' +  b'\x81' + toBits([False]*120) +  b'\xc0' +  b'\x82' + toBits([False]*120) + b'\xc0'
         return pick
 
 
