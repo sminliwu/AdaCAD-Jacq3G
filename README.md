@@ -7,7 +7,16 @@ A tiny driver to connect the AVL Jacq3 loom to [AdaCAD](https://github.com/Unsta
 2. Obtain `firebase-config.js` file and place in `/node` directory.
 3. Open terminal and navigate to `/node` directory.
 4. Run `npm install`.
-5. Run `node main.js`
+5. If you don't already have AdaCAD installed, also install that.
+
+## Run
+1. Switch your AdaCAD repository to the `comms` branch.
+2. Compile and run AdaCAD with `ng serve`.
+3. Open AdaCAD in your browser, open the side toolbar (">>" button) and navigate to the `Settings` tab.
+4. Click "Connect to Loom" and note the loom ID number that generates.
+5. Actually physically connect the loom to your computer.
+6. Open another terminal in the `/node` directory.
+7. Run `node main.js [loom ID #]` with the brackets filled in with Step 4's ID number.
 
 ## File Descriptions
 
