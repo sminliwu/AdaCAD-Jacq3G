@@ -204,13 +204,12 @@ class Loom extends EventEmitter {
 	 * @param pick string of 1's and 0's
 	 * @returns none
 	*/
-	sendPick(pick = this.heddles, mask = this.mask) {    
+	sendPick(pick, mask = this.mask) {    
     // before sending pick, check that port is ready to write	
+    this.heddles = boolStringToArray(pick);
 
-    let input = this.applyMask(pick, mask);
-    	
     // convert pick array to bytes
-    var pickBytes = this.pickToBytes(input);
+    var pickBytes = this.applyMask(this.heddles, mask).pickToBytes(input);
     // send
     this.send(pickBytes);
     this.pickNumber++;

@@ -173,7 +173,7 @@ class DBPipe extends EventEmitter {
 		if (active) {
 			// get the row currently in the buffer
 			console.log("starting to weave");
-			this.updatePickData(this.dbstatus.pick_data.val);
+			// this.updatePickData(this.dbstatus.pick_data.val);
 			this.loom.initialize();
 			this.dbstatus.loom_ready.setVal(true);
 			
@@ -199,8 +199,7 @@ class DBPipe extends EventEmitter {
 	updatePickData(data) {
 		console.log("dbPipe: updated pick data", data);
 		if (data) {
-			this.loom.heddles = boolStringToArray(data);
-			this.loom.sendPick();
+			this.loom.sendPick(data);
 		}
 	}
 	
