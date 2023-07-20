@@ -23,14 +23,17 @@ function boolStringToArray(str) {
  * @fires Comm#received
 */
 class Comm extends EventEmitter {
+  /** @type {SerialPort} port */
 	port;
-	readBuffer;
-	writeBuffer;
 
-	constructor(loomHandle) {
+	constructor() {
 		super();
 
 		SerialPort.list().then(ports => {
+      if (ports.length == 0) {
+        console.error("ERROR: Please connect the loom.");
+        this.emit('quit');
+      }
       console.log(ports);
       // Figure which port to use...
       const port = ports[0]; // brute force just assume there's one port available
@@ -44,7 +47,6 @@ class Comm extends EventEmitter {
         this.port.on('data', (data) => {
           console.log("loom-comm: received data - ", Buffer.from(data, 'base64'));
           console.log(data.length + " bytes");
-          this.readBuffer = data;
 
           /** 
            * @event Comm#received 
@@ -56,23 +58,27 @@ class Comm extends EventEmitter {
 
         this.port.on('close', (err) => {
           if (err) {
-            console.log("port closed due to transmission error");
+            console.error("port closed due to transmission error");
           }
         });
 
         this.port.on('error', (err) => {
-          console.log(err.code);
+          console.error("error: ", err.code);
         });      
       });
     });
 	}
 
+  get connected() { return (this.port) ? true : false; }
+
 	send(data) {
-		this.port.write(data);
+    if (this.connected) { this.port.write(data); }
 	}
 
 	end() {
-		this.port.end();
+    if (this.connected) {
+  		this.port.close(() => { console.log('serial port closed') });
+    }
 	}
 }
 
@@ -85,7 +91,6 @@ class Comm extends EventEmitter {
  */
 class Loom extends EventEmitter {
 	port;
-	connected = false;
 	comm;
 
 	// loom config
@@ -111,10 +116,10 @@ class Loom extends EventEmitter {
     if (mask) { this.mask = mask; }
 
     let middleFrameOnly = "".padEnd(120,'0').concat("".padEnd(120,'1')).concat("".padEnd(120,'0'));
-    console.log(middleFrameOnly);
+    // console.log(middleFrameOnly);
     this.mask = boolStringToArray(middleFrameOnly);
 
-		this.comm = new Comm(this);
+		this.comm = new Comm();
 		this.comm.on('connected', 
 			/** 
 			 * @event Loom#connection
@@ -126,12 +131,17 @@ class Loom extends EventEmitter {
 
 		this.comm.on('received', 
 			(data) => this.parseCommand(data));
+
+    this.comm.on('quit',
+      () => { this.emit('quit'); });
     	
     // start the loom with a tabby pick
 		while (this.heddles.length < this.width) {
       this.heddles.push(true, false);
     }
 	}
+
+  get connected() { return this.comm.connected; }
 
   /**
    * 
@@ -143,11 +153,14 @@ class Loom extends EventEmitter {
 	}
 
   initialize() {
-    this.send([0xc3]);
+    if (this.connected) {
+      this.send([0xc3]);
+    }
   }
 
   end() {
-    this.send([0xc1]);
+    if (this.connected) this.send([0xc1]);
+    // this.comm.end();
   }
 
   /**
@@ -174,10 +187,10 @@ class Loom extends EventEmitter {
        * @desc loom connection successful
        */
       console.log("loom pinged back");
-      this.emit('ack', true); // connection confirmation
+      this.emit('ready', true); // connection confirmation
     } else if (data[0] == 0x61 || data[0] == 0x63) {
       console.log("ready to receive pick");
-      this.emit('pick-req');
+      this.emit('pick-req', true);
     } else if (data[0] == 0x62) {
       // some sort of middle step when the shed is open?
       this.send([0xc1]);

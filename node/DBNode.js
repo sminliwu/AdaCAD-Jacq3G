@@ -221,8 +221,8 @@ class DBReadBuffer extends DBNode {
       console.log(this.val);
     });
     const detachDB = onValue(this.ref, (snapshot) => {
-      console.log("dbnode: data changed", snapshot.val());
       if (snapshot.val()) {
+        console.log("dbnode: buffer data changed", snapshot.val());
         this.val = snapshot.val();
         this.emit('change', this.val);
         // clear the buffer
