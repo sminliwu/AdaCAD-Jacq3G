@@ -3,11 +3,11 @@
 */
 
 const { initializeApp } = require('firebase/app');
-const { getDatabase, ref, get, set, onValue, push } = require("firebase/database");
+const { getDatabase } = require("firebase/database");
 const { EventEmitter } = require('stream');
-const { Loom, boolStringToArray } = require('./jacq3g')
+const { Loom } = require('./jacq3g')
 const { getFirebaseConfig } = require('./firebase-config.js');
-const { DBWriter, DBListener, DBTwoWay, OnlineStatus, DBWriterArray, DBReadBuffer } = require('./DBNode.js');
+const { DBWriter, DBListener, DBTwoWay, OnlineStatus, DBReadBuffer } = require('./DBNode.js');
 
 /**
 * Wraps all DBNodes into a single object that represents the
